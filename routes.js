@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require('mongoose');
 const clientSessions = require('client-sessions');
-mongoose.connect(
-	'mongodb://<Admin>:<A08101999>@ds018238.mlab.com:18238/newsocial'); // Connecting to the database
+mongoose.connect('mongodb://admin:admin1@ds018238.mlab.com:18238/newsocial'); // Connecting to the database
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error")); // If connection failed
 db.once("open", function(callback) {
