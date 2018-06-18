@@ -123,6 +123,7 @@ router.post("/getfollowing", function(req, res) {
 	});
 });
 router.post("/login", function(req, res) {
+	console.log(req.body);
 	User.findOne({
 		Username: req.body.username,
 		Password: req.body.password
