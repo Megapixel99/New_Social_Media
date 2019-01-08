@@ -11,7 +11,6 @@ router.get("/", function(req, res) {
 router.post("/login", function(req, res) {
     if (req.body.username == req.body.password) {
         curuser = req.body.username;
-        console.log(curuser);
         res.json({
             redirect: "/"
         });
@@ -86,9 +85,7 @@ router.get("/names/:id", function(req, res) {
     if (!curuser || curuser == undefined) {
         res.redirect("/login");
     } else {
-        console.log(req.params.id);
         if (req.params.id != undefined && req.params.id != null) {
-            console.log(req.params.id);
             if (req.params.id == 1) {
                 res.json({
                     name: "Seth Wheeler"
@@ -144,9 +141,7 @@ router.get("/addresses/:id", function(req, res) {
     if (!curuser || curuser == undefined) {
         res.redirect("/login");
     } else {
-        console.log(req.params.id);
         if (req.params.id != undefined && req.params.id != null) {
-            console.log(req.params.id);
             if (req.params.id == 1) {
                 res.json({
                     address: "1863 Via Primero"
@@ -181,9 +176,7 @@ router.get("/contact/:id", function(req, res) {
     if (!curuser || curuser == undefined) {
         res.redirect("/login");
     } else {
-        console.log(req.params.id);
         if (req.params.id != undefined && req.params.id != null) {
-            console.log(req.params.id);
             if (req.params.id == 1) {
                 res.json({
                     phoneNumber: 7609176976
