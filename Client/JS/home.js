@@ -1,5 +1,5 @@
 $.ajax({
-	url: "/userinfo",
+	url: "/userinfo/",
 	type: "GET",
 	success: function(data) {
 		if (!data || data == undefined) {
@@ -7,24 +7,19 @@ $.ajax({
 		} else if (data.redirect && data.redirect != undefined) {
 			window.location = data.redirect;
 		} else {
-			if (data.curuser) {
-				document.getElementById("followers").innerHTML = "Followers: " + data.curuser
+			if (data.user) {
+				document.getElementById("followers").innerHTML = "Followers: " + data.user
 					.Followers.length;
-				document.getElementById("following").innerHTML = "Following: " + data.curuser
+				document.getElementById("following").innerHTML = "Following: " + data.user
 					.Following.length;
 				document.getElementById("posts").innerHTML = "Posts: " + data.posts.length;
-				document.getElementById("username").innerHTML = data.curuser.Username;
+				document.getElementById("username").innerHTML = data.user.Username;
 				for (var i = 0; i < data.posts.length; i++) {
-					if (data.posts[i].User == data.curuser.Username) {
-						$("#mylist").prepend("<li>" + data.posts[i].Textbox +
-							"<input type='button' id=" + data.posts[i].Textbox +
-							" value='Like' onclick='Like(" + data.posts[i].Textbox + ")'/>" +
-							"<p>Comment: </p> <input type='text' id=" + data.posts[i].Textbox +
-							"comment" +
-							" value=''/> <input type='button' value='Submit' onclick='SubmitComment(" +
-							data.posts[i].Textbox + ")'/> <p id='likenum" + data.posts[i].Textbox +
-							data.curuser.Username + "'>Likes: " + data.posts[i].Likes + "</p>" +
-							"</li>");
+					if (data.posts[i].User == data.user.Username) {
+							$("#mylist").prepend("<li>" + data.posts[i].Textbox +
+								"<input type='button' id=" + data.posts[i].Textbox +
+								" value='Like' onclick='Like(" + data.posts[i].Textbox + ")'/>" + "<p id='likenum" + data.posts[i].Textbox +
+								data.posts[i].Username + "'>Likes: " + data.posts[i].LikedBy.length + "</p>" + "</li>");
 					}
 				}
 			} else {
@@ -47,7 +42,6 @@ function Upload() {
 			textbox: $('#textbox').val()
 		},
 		success: function(data) {
-			console.log(data);
 			if (!data || data == undefined) {
 				alert("ERROR");
 			} else {
@@ -64,13 +58,8 @@ function Upload() {
 							$("#mylist").prepend("<li>" + data.posts[data.posts.length - 1].Textbox +
 								"<input type='button' id=" + data.posts[data.posts.length - 1].Textbox +
 								" value='Like' onclick='Like(" + data.posts[data.posts.length -
-									1].Textbox + ")'/>" + "<p>Comment: </p> <input type='text' id=" +
-								data.posts[data.posts.length - 1].Textbox +
-								" value=''/> <input type='button' value='Submit' onclick='SubmitComment(" +
-								data.posts[data.posts.length - 1].Textbox +
-								")'/> <p id='likenum" + data.posts[data.posts.length - 1].Textbox +
-								data.curuser.Username + "'>Likes: " + data.posts[data.posts.length -
-									1].Likes + "</p>" + "</li>");
+									1].Textbox + ")'/>" + "<p id='likenum" + data.posts[data.posts.length - 1].Textbox +
+									"'>Likes: " + data.posts[data.posts.length - 1].LikedBy.length + "</p>" + "</li>");
 						}
 					},
 					error: function() {
@@ -121,16 +110,33 @@ function Like(text) {
 		data: {
 			posttext: text.id
 		},
+		success: function(data) {
+			var l = parseFloat(data.post.Likes);
+			l += 1;
+			$("#likenum" + data.post.Textbox).text("Likes:" + l );
+		},
 		dataType: "json"
 	});
 }
 
 function Comment(text) {
 	$.ajax({
-		url: "/commentpost",
+		url: "/post",
 		type: "POST",
 		data: {
 			posttext: text.id
+		},
+		dataType: "json"
+	});
+}
+
+function SubmitComment(post, comment) {
+	$.ajax({
+		url: "/commentpost",
+		type: "POST",
+		data: {
+			posttext: post,
+			comment: comment
 		},
 		dataType: "json"
 	});

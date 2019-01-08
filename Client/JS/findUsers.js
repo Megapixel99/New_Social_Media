@@ -68,3 +68,16 @@ function Home() {
     dataType: "json"
   });
 }
+
+function ViewProfile(User) {
+  var u = User;
+  console.log(User);
+  $.ajax({
+    url: "/userInfo/" + u,
+    type: "GET",
+    success: function(data) {
+      window.location = "/";
+    },
+    dataType: "json"
+  });
+}
